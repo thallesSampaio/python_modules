@@ -73,13 +73,6 @@ class GardenManager:
             return total
 
         @staticmethod
-        def total_plants(garden):
-            total_plants = 0
-            for plant in garden.plants:
-                total_plants += 1
-            return total_plants
-
-        @staticmethod
         def plant_types_count(garden):
             regular = 0
             flowering = 0
@@ -98,7 +91,7 @@ class GardenManager:
             score = 0
             for plant in garden.plants:
                 score += plant.height
-                if isinstance(plant, PrizeFlower):
+                if plant.get_type() == "prize":
                     score += plant.prize_points * 4
             return score
 
@@ -116,6 +109,13 @@ class GardenManager:
         for plant in garden.plants:
             print(f"- {plant.info()}")
             total_plants += 1
+        total_growth = self.GardenStats.total_growth(garden)
+        print(f"\nPlants added: {total_plants}, "
+              f"Total growth: {total_growth}cm")
+        regular, flowering, prize = self.GardenStats.plant_types_count(garden)
+        print(f"Plant types: {regular} regular,"
+              f" {flowering} flowering,"
+              f" {prize} prize flowers\n")
 
     @classmethod
     def create_garden_network(cls):
@@ -147,22 +147,6 @@ if __name__ == "__main__":
     alice_garden.grow_all()
     print()
     manager.report(alice_garden)
-    print()
-
-    alice_total_plants = manager.GardenStats.total_plants(alice_garden)
-    alice_growth = alice_score = manager.GardenStats.total_growth(alice_garden)
-    print(
-        f"Plants added: {alice_total_plants}, "
-        f"Total growth: {alice_growth}cm"
-        )
-    p_types = manager.GardenStats.plant_types_count(alice_garden)
-    regular, flowering, prize = p_types
-    print(
-        f"Plant types: {regular} regular,"
-        f" {flowering} flowering,"
-        f" {prize} prize flowers"
-        )
-    print()
     print(f"Height validation test: {manager.validate_heights(alice_garden)}")
 
     alice_score = manager.GardenStats.garden_score(alice_garden)
