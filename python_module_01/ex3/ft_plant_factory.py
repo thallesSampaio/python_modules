@@ -11,6 +11,15 @@ class Plant:
             )
 
 
+class PlantFactory:
+    def create_plants(data: dict) -> list:
+        garden = []
+        for name, value in data.items():
+            height, age = value
+            garden.append(Plant(name, height, age))
+        return garden
+
+
 if __name__ == "__main__":
     plants_data = {
         "Rose": [25, 30],
@@ -19,11 +28,7 @@ if __name__ == "__main__":
         "Sunflower": [80, 45],
         "Fern": [15, 120],
     }
-    garden = []
-    for name in plants_data:
-        height, age = plants_data[name]
-        plant = Plant(name, height, age)
-        garden.append(plant)
+    garden = PlantFactory.create_plants(plants_data)
     print("=== Plant Factory Output ===")
     total_plants = 0
     for plant in garden:
