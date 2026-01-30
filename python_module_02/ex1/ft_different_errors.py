@@ -1,57 +1,42 @@
-def garden_operations():
-    def v_error() -> None:
+def garden_operations() -> None:
+    print("\nTesting ValueError...")
+    try:
         int("abc")
+    except ValueError:
+        print("Caught ValueError: invalid literal for int()")
 
-    def z_error() -> None:
+    print("\nTesting ZeroDivisionError...")
+    try:
         10 / 0
+    except ZeroDivisionError:
+        print("Caught ZeroDivisionError: division by zero")
 
-    def f_error() -> None:
-        open("missing.txt")
+    print("\nTesting FileNotFoundError...")
+    try:
+        f = open("missing.txt", "r")
+        f.close()
+    except FileNotFoundError:
+        print("Caught FileNotFoundError: No such file 'missing.txt'")
 
-    def k_error() -> None:
-        {"tomato": 5}["missing_plant"]
+    print("\nTesting KeyError...")
+    try:
+        plants = {"tomato": 30, "lettuce": 20}
+        _ = plants["missing_plant"]
+    except KeyError:
+        print("Caught KeyError: 'missing\\_plant'")
 
-    return v_error, z_error, f_error, k_error
+    print("\nTesting multiple errors together...")
+    try:
+        int("oops")
+    except (ValueError, ZeroDivisionError, FileNotFoundError, KeyError):
+        print("Caught an error, but program continues!")
 
 
 def test_error_types() -> None:
-    v_error, z_error, f_error, k_error = garden_operations()
-
-    try:
-        print("Testing ValueError...")
-        v_error()
-    except ValueError:
-        print("Caught ValueError: invalid literal for int()\n")
-
-    try:
-        print("Testing ZeroDivisionError...")
-        z_error()
-    except ZeroDivisionError:
-        print("Caught ZeroDivisionError: division by zero\n")
-
-    try:
-        print("Testing FileNotFoundError...")
-        f_error()
-    except FileNotFoundError:
-        print("Caught FileNotFoundError: No such file 'missing.txt'\n")
-
-    try:
-        print("Testing KeyError...")
-        k_error()
-    except KeyError:
-        print("Caught KeyError: 'missing\\_plant'\n")
-
-    try:
-        print("Testing multiple errors together...")
-        v_error()
-        z_error()
-        f_error()
-        k_error()
-    except (ValueError, ZeroDivisionError, FileNotFoundError, KeyError):
-        print("Caught an error, but program continues!\n")
+    print("=== Garden Error Types Demo ===")
+    garden_operations()
+    print("\nAll error types tested successfully!")
 
 
 if __name__ == "__main__":
-    print("=== Garden Error Types Demo ===\n")
     test_error_types()
-    print("All error types tested successfully!")
