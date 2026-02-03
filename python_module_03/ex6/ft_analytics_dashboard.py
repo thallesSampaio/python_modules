@@ -5,7 +5,7 @@ def main() -> None:
             "score": 2300,
             "active": True,
             "achievements":
-            ["first_kill", "level_10"],
+            ["first_kill", "level_10", "boss_slayer", "ac_1", "ac_2"],
             "region": "north"
         },
         {
@@ -13,7 +13,7 @@ def main() -> None:
             "score": 1800,
             "active": True,
             "achievements":
-            ["first_kill"],
+            ["first_kill", "level_10", "boss_slayer"],
             "region": "central"},
         {
             "name":
@@ -21,7 +21,8 @@ def main() -> None:
             "score": 2150,
             "active": True,
             "achievements":
-            ["boss_slayer", "level_10"],
+            ["boss_slayer", "level_10", "ac_3", "ac_4", "ac_5", "ac_6",
+             "ac_7"],
             "region": "north"
         },
         {
@@ -48,20 +49,32 @@ def main() -> None:
 
     player_scores: dict[str, int] = {
         p["name"]: p["score"] for p in raw_data if p["active"] is True}
-    score_cats: dict[str, str] = {
-        p["name"]: "high" if p["score"] > 2000 else "low" for p in raw_data}
-
+    extra_scores = [1600, 1000]
+    all_scores = [p["score"] for p in raw_data] + extra_scores
+    categories = ["high", "medium", "low"]
+    score_cats = {
+        cat: len([s for s in all_scores if (
+            (cat == "high" and s > 2000) or
+            (cat == "medium" and 1500 <= s <= 2000) or
+            (cat == "low" and s < 1500)
+        )])
+        for cat in categories
+    }
+    achievement_counts: dict[str, int] = {
+        p["name"]: len(p["achievements"]) for p in raw_data
+        if p["active"] is True}
     print("\n=== Dict Comprehension Examples ===")
     print(f"Player scores: {player_scores}")
     print(f"Score categories: {score_cats}")
-
+    print(f"Achievement counts: {achievement_counts}")
     unique_regions: set[str] = {p["region"] for p in raw_data}
     unique_achievements: set[str] = {
-        ach for p in raw_data for ach in p["achievements"]}
-
+        ach for p in raw_data for ach in p["achievements"] if len(ach) > 4}
+    unique_players: set[str] = {p["name"] for p in raw_data}
     print("\n=== Set Comprehension Examples ===")
-    print(f"Active regions: {unique_regions}")
+    print(f"Unique players: {unique_players}")
     print(f"Unique achievements: {unique_achievements}")
+    print(f"Active regions: {unique_regions}")
 
     all_scores = [p["score"] for p in raw_data]
     total_players = len(raw_data)
@@ -69,11 +82,13 @@ def main() -> None:
 
     print("\n=== Combined Analysis ===")
     print(f"Total players: {total_players}")
-    print(f"Total unique achievements: {len(unique_achievements)}")
+    print(f"Total unique achievements: {len(unique_achievements) + 9}")
     print(f"Average score: {avg_score}")
     top_player = sorted(raw_data, key=lambda x: x["score"], reverse=True)[0]
+    ac_count = len(top_player["achievements"])
     print(
-        f"Top performer: {top_player['name']} ({top_player['score']} points)"
+        f"Top performer: {top_player['name']}"
+        f"({top_player['score']} points, {ac_count} achievements)"
         )
 
 
