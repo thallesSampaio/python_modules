@@ -1,4 +1,3 @@
-# Custom Exceptions (Inheritance Chain)
 class GardenError(Exception):
     """Base class for all garden errors."""
     pass

@@ -20,10 +20,14 @@ def check_temperature(temp_str: str) -> int | None:
             return temp_nbr
 
 
-if __name__ == "__main__":
-    print("=== Garden Temperature Checker ===\n")
+def test_temperature_input() -> None:
     tests = ["25", "abc", "100", "-50"]
     for test in tests:
         print(f"Testing temperature: {test}")
         check_temperature(test)
+
+
+if __name__ == "__main__":
+    print("=== Garden Temperature Checker ===\n")
+    test_temperature_input()
     print("All tests completed - program didn't crash!")
