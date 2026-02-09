@@ -1,28 +1,33 @@
-def recover_data(filePath: str) -> None:
-    print("=== CYBER ARCHIVES - PRESERVATION SYSTEM ===")
-    file = None
-    entries: list[str] = [
-        "New quantum algorithm discovered",
-        "Efficiency increased by 347%",
-        "Archived by Data Archivist trainee"
-    ]
-
+def recover_data(file_path: str) -> None:
     try:
-        print(f"\nInitializing new storage unit: {filePath}")
-        file = open(filePath, "w")
-        print("Storage unit created successfully...\n")
+        if file_path != "new_discovery.txt":
+            raise ValueError(
+                f"Unauthorized Path: '{file_path}'"
+                " violates preservation protocols.")
+        print("=== CYBER ARCHIVES - PRESERVATION SYSTEM ===\n")
+        entries: list[str] = [
+            "New quantum algorithm discovered",
+            "Efficiency increased by 347%",
+            "Archived by Data Archivist trainee"]
 
-        print("Inscribing preservation data...")
-        c: int = 1
-        for content in entries:
-            entry_header = (f"[ENTRY {c:03d}]")
-            file.write(f"{entry_header} {content}\n")
-            print(f"{entry_header} {content}")
-            c += 1
+        print(f"Initializing new storage unit: {file_path}")
+        with open(file_path, "w") as file:
+            print("Storage unit created successfully...\n")
+            print("Inscribing preservation data...")
 
-        file.close()
+            counter: int = 1
+            for content in entries:
+                entry_header = (f"[ENTRY {counter:03d}]")
+                file.write(f"{entry_header} {content}\n")
+                print(f"{entry_header} {content}")
+                counter += 1
+
         print("\nData inscription complete. Storage unit sealed.")
-        print(f"Archive {filePath} ready for long-term preservation.")
+        print(f"Archive {file_path} ready for long-term preservation.")
+    except ValueError as e:
+        print(e)
+    except PermissionError:
+        print(f"Security protocols deny write access to {file_path}")
     except Exception as e:
         print(f"CRITICAL FAILURE during inscription: {e}")
 
