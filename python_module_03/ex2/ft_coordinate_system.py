@@ -1,11 +1,15 @@
 import math
 
 
-def parse_coordinate(coord_str: str) -> tuple[int, int, int]:
+def parse_coordinate(coord_str: str) -> tuple[int, int, int] | None:
     """Converts a comma-separated string into a 3D tuple."""
     try:
         parts: list[str] = coord_str.split(",")
-        return (int(parts[0]), int(parts[1]), int(parts[2]))
+        try:
+            return (int(parts[0]), int(parts[1]), int(parts[2]))
+        except IndexError:
+            print(f"Error: Invalid coordinate format. Expected 'x,y,z' (3 integers), received: {coord_str}") # noqa
+            return None
     except ValueError as e:
         print(f"Error parsing coordinates: {e}")
         print(f"Error details - Type: {type(e).__name__}, Args: {e.args}")
@@ -35,9 +39,10 @@ def main() -> None:
     coord_input: str = "3,4,0"
     print(f"\nParsing coordinates: \"{coord_input}\"")
     p2: tuple[int, int, int] = parse_coordinate(coord_input)
-    print(f"Parsed position: {p2}")
-    dist2: float = get_distance(origin, p2)
-    print(f"Distance between {origin} and {p2}: {dist2:.2f}")
+    if p2 is not None:
+        print(f"Parsed position: {p2}")
+        dist2: float = get_distance(origin, p2)
+        print(f"Distance between {origin} and {p2}: {dist2:.2f}")
 
     invalid_input: str = "abc,def,ghi"
     print(f"\nParsing invalid coordinates: \"{invalid_input}\"")
@@ -45,7 +50,8 @@ def main() -> None:
 
     print("\nUnpacking demonstration:")
     parsed_pos = parse_coordinate(coord_input)
-    show_unpacking(parsed_pos)
+    if parsed_pos is not None:
+        show_unpacking(parsed_pos)
 
 
 if __name__ == "__main__":
