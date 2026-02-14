@@ -1,29 +1,30 @@
 def main():
-    vault_file = "vault_classified.txt"
+    vault_file = "classified_data.txt"
+    security_protocols = "security_protocols.txt"
 
     print("=== CYBER ARCHIVES - VAULT SECURITY SYSTEM ===")
     print("Initiating secure vault access...")
     print("Vault connection established with failsafe protocols")
 
-    with open(vault_file, "w") as file:
-        file.write("[CLASSIFIED] Quantum encryption keys recovered\n")
-        file.write("[CLASSIFIED] Archive integrity: 100%\n")
-
     print("\nSECURE EXTRACTION:")
     try:
-        with open(vault_file, "r") as vault:
-            content = vault.read()
+        with open(vault_file, "r") as file:
+            content = file.read()
             print(content.strip())
     except FileNotFoundError:
         print("[ERROR] Vault not found!")
 
     print("\nSECURE PRESERVATION:")
-    with open(vault_file, "a") as vault:
-        new_protocol = "[CLASSIFIED] New security protocols archived"
-        vault.write(f"{new_protocol}\n")
-        print(new_protocol)
+    try:
+        with open(security_protocols, "r") as file:
+            protocols = file.read()
+            print(protocols.strip())
+    except FileNotFoundError:
+        print("[ERROR] Vault not found!")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
-    print("\nVault automatically sealed upon completion")
+    print("Vault automatically sealed upon completion\n")
     print("All vault operations completed with maximum security.")
 
 

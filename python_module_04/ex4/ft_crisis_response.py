@@ -1,5 +1,4 @@
 def handle_crisis(file_path: str) -> None:
-    """Função mestre para gerenciar tentativas de acesso e crises."""
 
     if file_path == "standard_archive.txt":
         print(f"ROUTINE ACCESS: Attempting access to '{file_path}'...")

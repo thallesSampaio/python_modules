@@ -47,12 +47,15 @@ def prime_gen(n: int) -> Iterator[int]:
 
 
 def print_gen(generator: Iterator[int], first: bool = True) -> None:
-    for num in generator:
-        if not first:
-            print(", ", end="")
-        print(num, end="")
-        first = False
-    print()
+    try:
+        for num in generator:
+            if not first:
+                print(", ", end="")
+                print(num, end="")
+                first = False
+            print()
+    except TypeError:
+        print("Error: Provided object is not iterable.")
 
 
 def main() -> None:
@@ -65,17 +68,22 @@ def main() -> None:
     treasure_events: int = 0
     levelup_events: int = 0
 
-    for event in stream:
-        total_processed += 1
-        if event["level"] >= 10 and high_level_players < 342:
-            high_level_players += 1
-        if event["action"] == "found treasure" and treasure_events < 89:
-            treasure_events += 1
-        elif event["action"] == "leveled up" and levelup_events < 156:
-            levelup_events += 1
-        if event["id"] <= 3:
-            print(f"Event {event['id']}: Player {event['player']} "
-                  f"(level {event['level']}) {event['action']}")
+    try:
+        for event in stream:
+            total_processed += 1
+            if event["level"] >= 10 and high_level_players < 342:
+                high_level_players += 1
+            if event["action"] == "found treasure" and treasure_events < 89:
+                treasure_events += 1
+            elif event["action"] == "leveled up" and levelup_events < 156:
+                levelup_events += 1
+            if event["id"] <= 3:
+                print(f"Event {event['id']}: Player {event['player']} "
+                      f"(level {event['level']}) {event['action']}")
+    except StopIteration:
+        print("Stream ended unexpectedly.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
     print("...")
     print("\n=== Stream Analytics ===")
