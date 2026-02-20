@@ -3,7 +3,7 @@ from typing import Any, List, Optional, Dict, Union
 
 
 class DataStream(ABC):
-    def __init__(self, stream_id: str, stream_type: str):
+    def __init__(self, stream_id: str, stream_type: str = "Generic"):
         self.stream_id = stream_id
         self.stream_type = stream_type
         self.processed_count = 0
@@ -104,7 +104,7 @@ class StreamProcessor:
                 print(f"Error processing stream {self.streams[i].stream_id}: {e}") # noqa
 
 
-def main():
+def main() -> None:
     print("=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===")
 
     print("Initializing Sensor Stream...")
