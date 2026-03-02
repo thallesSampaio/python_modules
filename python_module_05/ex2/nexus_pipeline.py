@@ -63,6 +63,10 @@ class ProcessingPipeline(ABC):
 
 
 class JSONAdapter(ProcessingPipeline):
+    def __init__(self, id: str) -> None:
+        super().__init__()
+        self.pipeline_id = id
+
     def process(self, data: Any) -> Union[str, Any]:
         current_data = data
         for stage in self.stages:
@@ -71,6 +75,10 @@ class JSONAdapter(ProcessingPipeline):
 
 
 class CSVAdapter(ProcessingPipeline):
+    def __init__(self, id: str) -> None:
+        super().__init__()
+        self.pipeline_id = id
+
     def process(self, data: Any) -> Union[str, Any]:
         current_data = data
         for stage in self.stages:
@@ -79,6 +87,10 @@ class CSVAdapter(ProcessingPipeline):
 
 
 class StreamAdapter(ProcessingPipeline):
+    def __init__(self, id: str) -> None:
+        super().__init__()
+        self.pipeline_id = id
+
     def process(self, data: Any) -> Union[str, Any]:
         current_data = data
         for stage in self.stages:
