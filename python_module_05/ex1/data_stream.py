@@ -17,7 +17,11 @@ class DataStream(ABC):
         if not criteria:
             return data_batch
         filtered_data = []
-        target_item = str(criteria).lower()
+        try:
+            target_item = str(criteria).lower()
+        except Exception as e:
+            print(e)
+            return data_batch
         for item in data_batch:
             if target_item in item.lower():
                 filtered_data.append(item)
@@ -54,10 +58,10 @@ class SensorStream(DataStream):
     def validate(self, data_batch: Any) -> bool:
         if not isinstance(data_batch, list):
             return False
-        for x in data_batch:
-            if isinstance(x, str) and ':' in x:
+        for item in data_batch:
+            if isinstance(item, str) and ':' in item:
                 try:
-                    float(x.split(':')[1])
+                    float(item.split(':')[1])
                 except (ValueError, IndexError):
                     return False
         return True
@@ -65,6 +69,9 @@ class SensorStream(DataStream):
 
 class TransactionStream(DataStream):
     def process_batch(self, data_batch: List[str]) -> str:
+        if not self.validate(data_batch):
+            raise ValueError("Invalid data: must be numeric"
+                  "or 'key:value' strings.")
         net_flow = 0
         self.processed_count += len(data_batch)
         ops = len(data_batch)
@@ -80,6 +87,17 @@ class TransactionStream(DataStream):
                 print("Value error, invalid data type. Skipping item.")
         return f"Transaction analysis: {ops} " \
             f"operations, net flow: {-net_flow:+d} units"
+
+    def validate(self, data_batch: Any) -> bool:
+        if not isinstance(data_batch, list):
+            return False
+        for item in data_batch:
+            if isinstance(item, str) and ':' in item:
+                try:
+                    int(item.split(':')[1])
+                except (ValueError, IndexError):
+                    return False
+        return True
 
 
 class EventStream(DataStream):
