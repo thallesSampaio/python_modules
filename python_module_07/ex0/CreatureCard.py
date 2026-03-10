@@ -21,17 +21,26 @@ class CreatureCard(Card):
         return res
 
     def is_playable(self, available_mana: int) -> bool:
-        if available_mana >= self.cost:
-            return True
-        return False
+        try:
+            if available_mana >= self.cost:
+                return True
+            return False
+        except TypeError as e:
+            print(f"Error: {available_mana} is not a valid number. {e}")
+            return False
 
     def attack_target(self, target: "CreatureCard") -> dict:
-        return {
-            "attacker": self.name,
-            "target": target.name,
-            "damage_dealt": self.attack,
-            "combat_resolved": True if self.attack >= target.health else False
-        }
+        try:
+            return {
+                "attacker": self.name,
+                "target": target.name,
+                "damage_dealt": self.attack,
+                "combat_resolved": True if self.attack >= target.health
+                else False
+            }
+        except AttributeError as e:
+            print(e)
+            return {}
 
     def get_card_info(self) -> dict:
         return {
