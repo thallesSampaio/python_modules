@@ -7,12 +7,15 @@ from ex1.Deck import Deck
 if __name__ == "__main__":
     print("=== DataDeck Deck Builder ===\n")
     print("Building deck with different card types...")
-    deck = Deck()
-    deck.add_card(SpellCard("Lightning Bolt", 3, "Common", "damage"))
-    deck.add_card(ArtifactCard("Mana Crystal", 4, "Rare", 0, "buff"))
-    deck.add_card(CreatureCard("Fire Dragon", 5, "Epic", 8, 6))
-    print(deck.get_deck_stats())
-    print("Deck built successfully!\n")
+    try:
+        deck = Deck()
+        deck.add_card(SpellCard("Lightning Bolt", 3, "Common", "damage"))
+        deck.add_card(ArtifactCard("Mana Crystal", 4, "Rare", 0, "buff"))
+        deck.add_card(CreatureCard("Fire Dragon", 5, "Epic", 8, 6))
+        print(deck.get_deck_stats())
+        print("Deck built successfully!\n")
+    except Exception as e:
+        print(f"Error: {e}")
 
     state = {'mana': 10}
 

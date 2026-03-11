@@ -11,12 +11,12 @@ if __name__ == "__main__":
         print(f"Error creating card: {e}")
 
     game_state = {"mana": 6}
-    print(f"\nPlaying {card1.name} with {game_state["mana"]} mana available:")
+    print(f"\nPlaying {card1.name} with {game_state['mana']} mana available:")
     if card1.is_playable(game_state["mana"]):
-        print(f"Playable: {card1.is_playable(game_state["mana"])}")
+        print(f"Playable: {card1.is_playable(game_state['mana'])}")
         print(f"Play Result: {card1.play({})}")
     else:
-        print(f"Playable: {card1.is_playable(game_state["mana"])}")
+        print(f"Playable: {card1.is_playable(game_state['mana'])}")
     print(f"\n{card1.name} attacks {card2.name}:")
     print(f"Attack Result: {card1.attack_target(card2)}")
 
