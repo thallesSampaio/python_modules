@@ -1,5 +1,12 @@
+try:
+    from pydantic import BaseModel, Field, ValidationError, model_validator
+except ModuleNotFoundError:
+    print("Error: Pydantic library is not installed."
+          " Please install it using 'pip install pydantic' and try again.")
+    exit(1)
+
+
 from datetime import datetime
-from pydantic import BaseModel, Field, ValidationError, model_validator
 from enum import Enum
 from typing import Self
 
@@ -19,7 +26,7 @@ class CrewMember(BaseModel):
     age: int = Field(ge=18, le=80)
     specialization: str = Field(min_length=3, max_length=30)
     years_experience: int = Field(ge=0, le=50)
-    is_active: bool = True
+    is_active: bool = Field(default=True)
 
 
 class SpaceMission(BaseModel):
@@ -29,13 +36,13 @@ class SpaceMission(BaseModel):
     launch_time: datetime
     duration_days: int = Field(ge=1, le=3650)
     crew: list[CrewMember] = Field(min_length=1, max_length=12)
-    mission_status: str = 'planned'
+    mission_status: str = Field(default="planned")
     budget_millions: float = Field(ge=1.0, le=10000.0)
 
     @model_validator(mode='after')
     def check_id(self) -> Self:
         if not self.mission_id.startswith('M'):
-            raise TypeError('Mission ID must start with "M"')
+            raise ValueError('Mission ID must start with "M"')
         return self
 
     @model_validator(mode='after')
@@ -45,7 +52,7 @@ class SpaceMission(BaseModel):
             if r.rank.value > 3:
                 valid = True
         if valid is False:
-            raise TypeError('Must have at least one Commander or Captain')
+            raise ValueError('Must have at least one Commander or Captain')
         return self
 
     @model_validator(mode='after')
@@ -66,7 +73,7 @@ class SpaceMission(BaseModel):
     def active_crew(self) -> Self:
         check = [r for r in self.crew if r.is_active is False]
         if check:
-            raise TypeError("All crew members must be active")
+            raise ValueError("All crew members must be active")
         return self
 
 
@@ -127,11 +134,11 @@ def main() -> None:
         for m in valid.crew:
             print(f"- {m.name} ({m.member_id}) - {m.specialization}")
     except ValidationError as e:
-        print("Expected validation error:")
-        print(e.errors()[0]['msg'])
-    except TypeError as e:
-        print("Expected validation error:")
-        print(e)
+        if e.errors()[0]['type'] == 'value_error':
+            msg: str = e.errors()[0]['msg'].replace('Value error, ', '')
+        else:
+            msg = e.errors()[0]['msg']
+        print(f"Expected validation error:\n{msg}")
     print("\n=========================================")
     crew.pop(0)
     try:
@@ -146,11 +153,11 @@ def main() -> None:
         )
         print(invalid)
     except ValidationError as e:
-        print("Expected validation error:")
-        print(e.errors()[0]['msg'])
-    except TypeError as e:
-        print("Expected validation error:")
-        print(e)
+        if e.errors()[0]['type'] == 'value_error':
+            msg: str = e.errors()[0]['msg'].replace('Value error, ', '')
+        else:
+            msg = e.errors()[0]['msg']
+        print(f"Expected validation error:\n{msg}")
 
 
 if __name__ == '__main__':

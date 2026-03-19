@@ -1,4 +1,11 @@
-from pydantic import BaseModel, Field, ValidationError
+try:
+    from pydantic import BaseModel, Field, ValidationError
+except ModuleNotFoundError:
+    print("Error: Pydantic library is not installed."
+          " Please install it using 'pip install pydantic' and try again.")
+    exit(1)
+
+
 from datetime import datetime
 from typing import Optional
 
@@ -10,7 +17,7 @@ class SpaceStation(BaseModel):
     power_level: float = Field(ge=0.0, le=100.0)
     oxygen_level: float = Field(ge=0.0, le=100.0)
     last_maintenance: datetime
-    is_operational: bool = True
+    is_operational: bool = Field(default=True)
     notes: Optional[str] = Field(default=None, max_length=200)
 
 
@@ -23,8 +30,7 @@ def main() -> None:
             crew_size=6,
             power_level=85.5,
             oxygen_level=92.3,
-            last_maintenance=datetime(2024, 5, 1, 12, 0),
-            is_operational=True,
+            last_maintenance='2024-05-01'
         )
         print("========================================")
         print("Valid station created:")
@@ -33,13 +39,10 @@ def main() -> None:
         print(f"Crew: {valid.crew_size} people")
         print(f"Power: {valid.power_level}%")
         print(f"Oxygen: {valid.oxygen_level}%")
-        if valid.is_operational is True:
-            print("Status: Operational")
-        else:
-            print("Status: Not Operational")
+        print("Status: Operational" if valid.is_operational
+              else "Status: Not Operational")
     except ValidationError as e:
         print(f"Expected validation error:\n{e.errors()[0]['msg']}")
-        return
     print("\n========================================")
     try:
         invalid = SpaceStation(
@@ -48,13 +51,11 @@ def main() -> None:
             crew_size=21,
             power_level=85.5,
             oxygen_level=92.3,
-            last_maintenance=datetime(2024, 5, 1, 12, 0),
-            is_operational=True,
+            last_maintenance=datetime(2024, 5, 1)
         )
         print(invalid)
     except ValidationError as e:
         print(f"Expected validation error:\n{e.errors()[0]['msg']}")
-        return
 
 
 if __name__ == "__main__":
