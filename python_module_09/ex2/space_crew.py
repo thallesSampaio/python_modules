@@ -52,7 +52,8 @@ class SpaceMission(BaseModel):
             if r.rank.value > 3:
                 valid = True
         if valid is False:
-            raise ValueError('Must have at least one Commander or Captain')
+            raise ValueError("Mission Must have at"
+                  " least one Commander or Captain")
         return self
 
     @model_validator(mode='after')
@@ -110,6 +111,7 @@ def main() -> None:
         ]
     except ValidationError as e:
         print(f"Error: {e}")
+        exit(1)
 
     try:
         valid = SpaceMission(
@@ -121,7 +123,7 @@ def main() -> None:
             budget_millions=2500.0,
             crew=crew,
         )
-
+        print("Space Mission Crew Validation")
         print("=========================================")
         print("Valid mission created:")
         print(f"Mission: {valid.mission_name}\n"
