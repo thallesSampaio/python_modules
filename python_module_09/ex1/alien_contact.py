@@ -56,7 +56,7 @@ class AlienContact(BaseModel):
     def strong_messages(self) -> Self:
         if self.signal_strength > 7.0 and \
            self.message_received is None:
-            raise ValidationError(
+            raise ValueError(
                 "Strong signals (> 7.0) should include received messages")
         return self
 
@@ -88,6 +88,7 @@ def main() -> None:
             msg: str = e.errors()[0]['msg'].replace('Value error, ', '')
         else:
             msg = e.errors()[0]['msg']
+        print(f"Expected validation error:\n{msg}")
     print("======================================")
     try:
         valid = AlienContact(

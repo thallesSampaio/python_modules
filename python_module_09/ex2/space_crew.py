@@ -110,7 +110,7 @@ def main() -> None:
             ),
         ]
     except ValidationError as e:
-        print(f"Error: {e}")
+        print(f"Error: {e.errors()[0]['msg']}")
         exit(1)
 
     try:
