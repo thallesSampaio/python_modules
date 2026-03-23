@@ -1,6 +1,6 @@
 from functools import reduce, partial, lru_cache, singledispatch
 from operator import add, mul
-from typing import Callable, Any
+from typing import Any
 
 
 def spell_reducer(spells: list[int], operation: str) -> int:
@@ -17,7 +17,7 @@ def spell_reducer(spells: list[int], operation: str) -> int:
     return reduce(ops[operation], spells)
 
 
-def partial_enchanter(base_enchantment: Callable) -> dict[str, Callable]:
+def partial_enchanter(base_enchantment: callable) -> dict[str, callable]:
     return {
         "fire_enchant": partial(base_enchantment, power=50, element="fire"),
         "ice_enchant": partial(base_enchantment, power=50, element="ice"),
@@ -33,7 +33,7 @@ def memoized_fibonacci(n: int) -> int:
     return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
 
 
-def spell_dispatcher() -> Callable:
+def spell_dispatcher() -> callable:
     @singledispatch
     def dispatcher(arg: Any):
         return "Unknown spell type"

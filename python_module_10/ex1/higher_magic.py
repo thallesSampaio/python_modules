@@ -1,7 +1,4 @@
-from typing import Callable
-
-
-def spell_combiner(spell1: Callable, spell2: Callable) -> Callable:
+def spell_combiner(spell1: callable, spell2: callable) -> callable:
     if not callable(spell1) or not callable(spell2):
         raise ValueError("Both spells must be callable functions.")
 
@@ -10,7 +7,7 @@ def spell_combiner(spell1: Callable, spell2: Callable) -> Callable:
     return combined
 
 
-def power_amplifier(base_spell: Callable, multiplier: int) -> Callable:
+def power_amplifier(base_spell: callable, multiplier: int) -> callable:
     if not callable(base_spell):
         raise ValueError("Base spell must be callable function.")
     if multiplier.__class__ != int:
@@ -27,7 +24,7 @@ def power_amplifier(base_spell: Callable, multiplier: int) -> Callable:
     return amplifier
 
 
-def conditional_caster(condition: Callable, spell: Callable) -> Callable:
+def conditional_caster(condition: callable, spell: callable) -> callable:
     if not callable(condition) or not callable(spell):
         raise ValueError("Both spells must be callable functions.")
 
@@ -38,7 +35,7 @@ def conditional_caster(condition: Callable, spell: Callable) -> Callable:
     return caster
 
 
-def spell_sequence(spells: list[Callable]) -> Callable:
+def spell_sequence(spells: list[callable]) -> callable:
     def sequence(*args, **kwargs) -> list:
         results = []
         for spell in spells:

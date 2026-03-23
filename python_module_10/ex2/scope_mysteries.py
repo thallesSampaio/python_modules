@@ -1,7 +1,7 @@
-from typing import Callable, Any
+from typing import Any
 
 
-def mage_counter() -> Callable:
+def mage_counter() -> callable:
     count = 0
 
     def counter():
@@ -11,7 +11,7 @@ def mage_counter() -> Callable:
     return counter
 
 
-def spell_accumulator(initial_power: int) -> Callable:
+def spell_accumulator(initial_power: int) -> callable:
     if initial_power.__class__ != int:
         raise TypeError("Initial power must be a integer.")
     total_power = initial_power
@@ -26,7 +26,7 @@ def spell_accumulator(initial_power: int) -> Callable:
     return accumulator
 
 
-def enchantment_factory(enchantment_type: str) -> Callable:
+def enchantment_factory(enchantment_type: str) -> callable:
     if enchantment_type.__class__ != str:
         raise TypeError("Enchantment type must be string.")
 
@@ -38,7 +38,7 @@ def enchantment_factory(enchantment_type: str) -> Callable:
     return enchant
 
 
-def memory_vault() -> dict[str, Callable]:
+def memory_vault() -> dict[str, callable]:
     vault = {}
 
     def store(key: str, value: Any) -> None:
